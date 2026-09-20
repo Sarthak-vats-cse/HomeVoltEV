@@ -38,46 +38,46 @@ API
 
 The api/ folder contains the API implementation for handling HomeVolt data.
 
-api/main.py
+```api/main.py```
 
 Contains the main API application and API endpoints used to access and process HomeVolt charger, host, location, availability, and booking data.
 
-api/filters.py
+```api/filters.py```
 
 Contains filtering functions used to filter charger and location data according to the required parameters.
 
-Data
+```Data```
 
 The data/ folder contains the structured JSON data used by the HomeVolt API.
 
-hosts.json
+```hosts.json```
 
 Contains information about charger owners/hosts.
 
-chargers.json
+```chargers.json```
 
 Contains charger information including:
-
+```
 Charger ID
 Host ID
 Connector type
 Charging speed
 Price per hour
 locations.json
-
+```
 Contains location information associated with HomeVolt hosts and chargers.
 
 The location data is used for geocoding and distance-based operations.
 
-availability.json
+```availability.json```
 
 Contains charger availability information.
 
-bookings.json
+```bookings.json```
 
 Contains booking information related to charger usage.
 
-Geocoding
+```Geocoding```
 
 The geocode_locations.py script is used to convert location information into geographical coordinates.
 
@@ -87,30 +87,29 @@ Latitude
 Longitude
 
 These coordinates are used for location-based calculations and charger location data.
-
+```
 Geocoding API
-
+```
 The project uses the HeiGIT / openrouteservice geospatial services for geocoding and location-related operations.
 
 HeiGIT API:
 
-https://api.heigit.org/
+```https://api.heigit.org/```
 
 An API key is required for accessing the required openrouteservice services.
-
 The API key should be stored locally in the .env file and must not be uploaded to GitHub.
 
 Environment Variable
 
 Create a .env file in the project root and add your API key.
 
-HEIGIT_API_KEY=your_api_key_here
+```HEIGIT_API_KEY=your_api_key_here```
 
 Replace:
 
-your_api_key_here
+```your_api_key_here```
 
-with your actual HeiGIT/openrouteservice API key.
+with your actual ```HeiGIT/openrouteservice API key.```
 
 Do not share or commit the actual API key.
 
@@ -118,11 +117,11 @@ Distance Utilities
 
 The utils/ folder contains distance-related functionality.
 
-utils/distance.py
+```utils/distance.py```
 
 Contains functions used for calculating distances between geographical coordinates or locations.
 
-utils/charger_distance.py
+```utils/charger_distance.py```
 
 Contains functions for calculating distances related to HomeVolt chargers.
 
@@ -144,30 +143,31 @@ Run all tests using:
 
 pytest
 Setup
-1. Clone the Repository
+```1. Clone the Repository```
 
 Clone the API & Data branch:
-
+```
 git clone -b "API&Data" https://github.com/Sarthak-vats-cse/HomeVoltEV.git
+```
 2. Enter the Project Directory
-cd HomeVoltEV
+```cd HomeVoltEV```
 3. Create a Virtual Environment
 
 On Windows:
 
-python -m venv venv
+```python -m venv venv```
 
 Activate the virtual environment:
 
-venv\Scripts\activate
+```venv\Scripts\activate```
 4. Install Dependencies
 
 Install the required Python packages.
 
 If a requirements.txt file is available:
-
+```
 pip install -r requirements.txt
-
+```
 Otherwise, install the packages required by the API and geocoding scripts according to the project imports.
 
 Environment Configuration
@@ -175,9 +175,9 @@ Environment Configuration
 Create a .env file in the project root.
 
 Add:
-
+```
 HEIGIT_API_KEY=your_api_key_here
-
+```
 Replace your_api_key_here with your own API key.
 
 The .env file is excluded from Git using .gitignore so that the API key is not uploaded to GitHub.
@@ -185,13 +185,13 @@ The .env file is excluded from Git using .gitignore so that the API key is not u
 Running the API
 
 Activate the virtual environment:
-
+```
 venv\Scripts\activate
-
+```
 Run the FastAPI application:
-
+```
 uvicorn api.main:app --reload
-
+```
 The API will run at:
 
 http://127.0.0.1:8000
@@ -239,11 +239,11 @@ Automated tests
 Security
 
 The following files and information must remain private:
-
+```
 .env
 API keys
 Secret credentials
-
+```
 Never commit an actual API key to GitHub.
 
 The API key should only be stored locally in the .env file.
@@ -264,3 +264,7 @@ HeiGIT
 openrouteservice
 OpenStreetMap-based geospatial services
 Pytest
+Pytest
+
+
+**One important thing:** I have kept `HEIGIT_API_KEY` in this version because that was the variable name we discussed, but I couldn't verify it from your actual `geocode_locations.py`. If your code uses something like `ORS_API_KEY` instead, that **one line must match your code exactly**.
