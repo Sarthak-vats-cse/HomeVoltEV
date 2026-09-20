@@ -1,6 +1,8 @@
 # HomeVolt EV — API & Data
 
-This folder contains the API, structured JSON data, geocoding, filtering, distance calculation utilities, and tests developed for the HomeVolt EV project.
+This repository contains the API and data layer developed for the HomeVolt EV project.
+
+It includes structured JSON datasets, FastAPI endpoints, data filtering, geocoding, distance calculations, charger-distance utilities, and automated tests.
 
 ## Project Structure
 
@@ -30,191 +32,211 @@ HomeVolt-API-Data/
 │   └── distance.py
 │
 ├── geocode_locations.py
-├── .env
 ├── .gitignore
 └── README.md
 ```
-API
 
-The api/ folder contains the API implementation for handling HomeVolt data.
+## API
 
-```api/main.py```
+### `api/main.py`
 
-Contains the main API application and API endpoints used to access and process HomeVolt charger, host, location, availability, and booking data.
+Contains the main FastAPI application and endpoints for accessing and processing HomeVolt charger, host, location, availability, and booking data.
 
-```api/filters.py```
+### `api/filters.py`
 
-Contains filtering functions used to filter charger and location data according to the required parameters.
+Contains filtering functionality for retrieving relevant charger and location data based on the required parameters.
 
-```Data```
+## Data
 
-The data/ folder contains the structured JSON data used by the HomeVolt API.
+The `data/` directory contains the structured JSON datasets used by the API and location-processing utilities.
 
-```hosts.json```
+### `hosts.json`
 
-Contains information about charger owners/hosts.
+Stores information about HomeVolt charger hosts.
 
-```chargers.json```
+### `chargers.json`
 
-Contains charger information including:
-```
-Charger ID
-Host ID
-Connector type
-Charging speed
-Price per hour
-locations.json
-```
-Contains location information associated with HomeVolt hosts and chargers.
+Stores charger information such as:
 
-The location data is used for geocoding and distance-based operations.
+- Charger ID
+- Host ID
+- Connector type
+- Charging speed
+- Price per hour
 
-```availability.json```
+### `locations.json`
 
-Contains charger availability information.
+Stores location information associated with HomeVolt hosts and chargers.
 
-```bookings.json```
+### `availability.json`
 
-Contains booking information related to charger usage.
+Stores charger availability information.
 
-```Geocoding```
+### `bookings.json`
 
-The geocode_locations.py script is used to convert location information into geographical coordinates.
+Stores booking-related information.
 
-The geocoding process generates:
+## Geocoding
 
-Latitude
-Longitude
+The `geocode_locations.py` script processes location information and converts addresses or location data into geographical coordinates.
 
-These coordinates are used for location-based calculations and charger location data.
-```
-Geocoding API
-```
-The project uses the HeiGIT / openrouteservice geospatial services for geocoding and location-related operations.
+The generated coordinates include:
 
-HeiGIT API:
+- Latitude
+- Longitude
 
-```https://api.heigit.org/```
+These coordinates are used for location-based operations and distance calculations.
 
-An API key is required for accessing the required openrouteservice services.
-The API key should be stored locally in the .env file and must not be uploaded to GitHub.
+## Geocoding API
 
-Environment Variable
+The project uses HeiGIT / openrouteservice services for geospatial operations.
 
-Create a .env file in the project root and add your API key.
+API service:
 
-```HEIGIT_API_KEY=your_api_key_here```
+https://api.heigit.org/
 
-Replace:
+An API key is required for the geospatial services used by the project.
 
-```your_api_key_here```
+Create an API key through the HeiGIT/openrouteservice service and store it locally in the `.env` file.
 
-with your actual ```HeiGIT/openrouteservice API key.```
+### Environment Variable
 
-Do not share or commit the actual API key.
-
-Distance Utilities
-
-The utils/ folder contains distance-related functionality.
-
-```utils/distance.py```
-
-Contains functions used for calculating distances between geographical coordinates or locations.
-
-```utils/charger_distance.py```
-
-Contains functions for calculating distances related to HomeVolt chargers.
-
-These utilities can be used to determine the distance between a user's location and available HomeVolt chargers.
-
-Tests
-
-The tests/ folder contains tests for the API and data-related functionality.
-
-The tests cover:
-
-Charger distance calculations
-General distance calculations
-Environment configuration
-Geocoding
-Location distance calculations
-
-Run all tests using:
-
-pytest
-Setup
-```1. Clone the Repository```
-
-Clone the API & Data branch:
-```
-git clone -b "API&Data" https://github.com/Sarthak-vats-cse/HomeVoltEV.git
-```
-2. Enter the Project Directory
-```cd HomeVoltEV```
-3. Create a Virtual Environment
-
-On Windows:
-
-```python -m venv venv```
-
-Activate the virtual environment:
-
-```venv\Scripts\activate```
-4. Install Dependencies
-
-Install the required Python packages.
-
-If a requirements.txt file is available:
-```
-pip install -r requirements.txt
-```
-Otherwise, install the packages required by the API and geocoding scripts according to the project imports.
-
-Environment Configuration
-
-Create a .env file in the project root.
-
-Add:
-```
+```env
 HEIGIT_API_KEY=your_api_key_here
 ```
-Replace your_api_key_here with your own API key.
 
-The .env file is excluded from Git using .gitignore so that the API key is not uploaded to GitHub.
+Replace `your_api_key_here` with your actual API key.
 
-Running the API
+**Never upload the actual API key to GitHub.**
 
-Activate the virtual environment:
+The `.env` file is excluded through `.gitignore`.
+
+## Distance Utilities
+
+### `utils/distance.py`
+
+Contains functions for calculating distances between geographical coordinates or locations.
+
+### `utils/charger_distance.py`
+
+Contains functions for calculating distances between users/locations and HomeVolt chargers.
+
+These utilities are used for location-based charger discovery and distance calculations.
+
+## Tests
+
+The `tests/` directory contains tests for the API and data functionality.
+
+Tests include:
+
+- Charger distance calculations
+- General distance calculations
+- Environment configuration
+- Geocoding
+- Location distance calculations
+
+Run the tests using:
+
+```bash
+pytest
 ```
+
+## Setup
+
+### Clone the API & Data Branch
+
+```bash
+git clone -b "API&Data" https://github.com/Sarthak-vats-cse/HomeVoltEV.git
+```
+
+### Enter the Repository
+
+```bash
+cd HomeVoltEV
+```
+
+### Create a Virtual Environment
+
+Windows:
+
+```powershell
+python -m venv venv
+```
+
+Activate it:
+
+```powershell
 venv\Scripts\activate
 ```
-Run the FastAPI application:
+
+### Install Dependencies
+
+If a `requirements.txt` file is available:
+
+```powershell
+pip install -r requirements.txt
 ```
+
+Otherwise, install the required packages used by the API and data-processing scripts.
+
+## Environment Configuration
+
+Create a `.env` file in the project root:
+
+```env
+HEIGIT_API_KEY=your_api_key_here
+```
+
+Replace `your_api_key_here` with your own API key.
+
+Do not commit `.env` or expose the API key publicly.
+
+## Running the API
+
+Activate the virtual environment:
+
+```powershell
+venv\Scripts\activate
+```
+
+Start the FastAPI application:
+
+```powershell
 uvicorn api.main:app --reload
 ```
-The API will run at:
 
+The API will be available at:
+
+```text
 http://127.0.0.1:8000
+```
 
-FastAPI interactive API documentation is available at:
+FastAPI documentation:
 
+```text
 http://127.0.0.1:8000/docs
-Running the Geocoding Script
+```
 
-The geocoding script can be executed from the project root using:
+## Running Geocoding
 
+Run the geocoding script from the project root:
+
+```powershell
 python geocode_locations.py
+```
 
-The script processes the location data and generates geographical coordinates required for location-based operations.
+The script processes the location data and generates geographical coordinates.
 
-Data Processing Flow
+## Data Processing Flow
+
+```text
 JSON Data
     ↓
-API
+FastAPI
     ↓
 Data Filtering
     ↓
-Location Data
+Location Processing
     ↓
 Geocoding
     ↓
@@ -222,49 +244,52 @@ Latitude & Longitude
     ↓
 Distance Calculation
     ↓
-Charger Location Results
-API & Data Components
-
-The API & Data implementation consists of:
-
-Structured JSON datasets
-FastAPI application
-Data filtering
-Location processing
-Geocoding
-Latitude and longitude generation
-Distance calculations
-Charger distance calculations
-Automated tests
-Security
-
-The following files and information must remain private:
+Charger Distance Results
 ```
-.env
-API keys
-Secret credentials
-```
+
+## API & Data Components
+
+The API & Data implementation includes:
+
+- Structured JSON datasets
+- FastAPI application
+- Data filtering
+- Host and charger data
+- Location data
+- Availability data
+- Booking data
+- Geocoding
+- Latitude and longitude processing
+- Distance calculations
+- Charger distance calculations
+- Automated testing
+
+## Security
+
+The following must remain private:
+
+- `.env`
+- API keys
+- Secret credentials
+
 Never commit an actual API key to GitHub.
 
-The API key should only be stored locally in the .env file.
+The API key should only be stored locally in the `.env` file.
 
-Development Notes
+## Development Notes
 
-The JSON files contain development/demo data for HomeVolt.
+- The JSON files contain development/demo data.
+- `.env` should remain local.
+- `venv/` should not be uploaded to GitHub.
+- Each developer should create their own virtual environment.
+- Each developer should use their own API key in their local `.env` file.
 
-The venv/ directory should not be uploaded to GitHub.
+## Technologies Used
 
-Each developer should create their own virtual environment and .env file locally.
-
-Technologies Used
-Python
-FastAPI
-JSON
-HeiGIT
-openrouteservice
-OpenStreetMap-based geospatial services
-Pytest
-Pytest
-
-
-**One important thing:** I have kept `HEIGIT_API_KEY` in this version because that was the variable name we discussed, but I couldn't verify it from your actual `geocode_locations.py`. If your code uses something like `ORS_API_KEY` instead, that **one line must match your code exactly**.
+- Python
+- FastAPI
+- JSON
+- HeiGIT
+- openrouteservice
+- OpenStreetMap-based geospatial services
+- Pytest
