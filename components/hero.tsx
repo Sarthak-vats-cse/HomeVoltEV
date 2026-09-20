@@ -2,6 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+const ChargingMap = dynamic(() => import("./ChargingMap"), {
+  ssr: false,
+});
 
 const testimonials = [
   {
@@ -166,21 +170,9 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="bg-white border border-gray-100 rounded-3xl p-6 lg:p-8 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Map */}
-          <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-lg h-72 relative">
-            <img
-              src="https://static.vecteezy.com/system/resources/thumbnails/010/801/642/small/aerial-clean-top-view-of-the-night-time-city-map-with-street-and-river-001-vector.jpg"
-              alt="City map"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            {[{ top: "16px", left: "80px" }, { top: "96px", right: "96px" }, { bottom: "64px", left: "128px" }].map((pos, i) => (
-              <div key={i} className="absolute w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg text-sm" style={pos}>⚡</div>
-            ))}
-            <div className="absolute bottom-20 right-20 w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg text-sm">🏠</div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="absolute -inset-5 rounded-full bg-blue-500/20 animate-ping" />
-              <div className="w-4 h-4 rounded-full bg-blue-600 border-4 border-white shadow-lg" />
-            </div>
-          </div>
+<div className="rounded-2xl overflow-hidden border border-gray-100 shadow-lg h-72 relative">
+  <ChargingMap />
+</div>
 
           {/* Form */}
           <div className="flex flex-col gap-5">
