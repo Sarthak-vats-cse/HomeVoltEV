@@ -1,0 +1,92 @@
+[
+  {
+    "locationId": "LOC001",
+    "hostId": "HOST001",
+    "address": "Max Site Dream Homes, Sector 61, Kundli",
+    "city": "Sonepat",
+    "pincode": "131028",
+    "latitude": 28.902189,
+    "longitude": 77.122078
+  },
+  {
+    "locationId": "LOC002",
+    "hostId": "HOST002",
+    "address": "Tulip Grand Apartments, Near OP Jindal University, Sector 35",
+    "city": "Sonepat",
+    "pincode": "131103",
+    "latitude": 28.922157,
+    "longitude": 77.06384
+  },
+  {
+    "locationId": "LOC003",
+    "hostId": "HOST003",
+    "address": "Canara Apartments, Sector 13, Rohini",
+    "city": "Delhi",
+    "pincode": "110085",
+    "latitude": 28.712667,
+    "longitude": 77.132833
+  },
+  {
+    "locationId": "LOC004",
+    "hostId": "HOST004",
+    "address": "Sector 18",
+    "city": "Noida",
+    "pincode": "201301",
+    "latitude": 28.569897,
+    "longitude": 77.323142
+  },
+  {
+  "locationId": "LOC005",
+  "hostId": "HOST005",
+  "address": "Ghaziabad",
+  "city": "Ghaziabad",
+  "pincode": "201001",
+  "latitude": 28.670185,
+  "longitude": 77.444550
+},
+  {
+    "locationId": "LOC006",
+    "hostId": "HOST006",
+    "address": "Dwarka Sector 10",
+    "city": "Delhi",
+    "pincode": "110075",
+    "latitude": 28.584973,
+    "longitude": 77.058526
+  },
+  {
+  "locationId": "LOC007",
+  "hostId": "HOST007",
+  "address": "Sarojini Nagar",
+  "city": "New Delhi",
+  "pincode": "110023",
+  "latitude": 28.5757,
+  "longitude": 77.1990
+},
+  {
+  "locationId": "LOC008",
+  "hostId": "HOST008",
+  "address": "Gandhi Nagar",
+  "city": "Delhi",
+  "pincode": "110031",
+  "latitude": 28.66214,
+  "longitude": 77.26665
+},
+  {
+    "locationId": "LOC009",
+    "hostId": "HOST009",
+    "address": "Sector 14",
+    "city": "Gurugram",
+    "pincode": "122001",
+    "latitude": 28.459647,
+    "longitude": 77.061922
+  },
+  {
+    "locationId": "LOC010",
+    "hostId": "HOST010",
+    "address": "Sector 137",
+"city": "Noida",
+"pincode": "201305",
+"latitude": 28.51087,
+"longitude": 77.40350
+  }
+]

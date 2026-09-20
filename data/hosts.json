@@ -1,0 +1,82 @@
+[
+  {
+    "hostId": "HOST001",
+    "name": "Host 1",
+    "address": "HOME_ADDRESS_1",
+    "city": "YOUR_CITY",
+    "pincode": "YOUR_PINCODE",
+    "verified": true
+  },
+  {
+    "hostId": "HOST002",
+    "name": "Host 2",
+    "address": "HOME_ADDRESS_2",
+    "city": "YOUR_CITY",
+    "pincode": "YOUR_PINCODE",
+    "verified": true
+  },
+  {
+    "hostId": "HOST003",
+    "name": "Host 3",
+    "address": "HOME_ADDRESS_3",
+    "city": "YOUR_CITY",
+    "pincode": "YOUR_PINCODE",
+    "verified": true
+  },
+  {
+    "hostId": "HOST004",
+    "name": "Demo Host 4",
+    "address": "Sector 18",
+    "city": "Noida",
+    "pincode": "201301",
+    "verified": true
+  },
+  {
+    "hostId": "HOST005",
+    "name": "Demo Host 5",
+    "address": "Sector 62",
+    "city": "Noida",
+    "pincode": "201309",
+    "verified": true
+  },
+  {
+    "hostId": "HOST006",
+    "name": "Demo Host 6",
+    "address": "Dwarka Sector 10",
+    "city": "Delhi",
+    "pincode": "110075",
+    "verified": true
+  },
+  {
+    "hostId": "HOST007",
+    "name": "Demo Host 7",
+    "address": "Janakpuri",
+    "city": "Delhi",
+    "pincode": "110058",
+    "verified": true
+  },
+  {
+    "hostId": "HOST008",
+    "name": "Demo Host 8",
+    "address": "Sector 29",
+    "city": "Gurugram",
+    "pincode": "122001",
+    "verified": true
+  },
+  {
+    "hostId": "HOST009",
+    "name": "Demo Host 9",
+    "address": "Sector 14",
+    "city": "Gurugram",
+    "pincode": "122001",
+    "verified": true
+  },
+  {
+    "hostId": "HOST010",
+    "name": "Demo Host 10",
+    "address": "Sector 18",
+    "city": "Noida",
+    "pincode": "201301",
+    "verified": true
+  }
+]
