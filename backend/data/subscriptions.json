@@ -1,0 +1,47 @@
+[
+  {
+    "subscriptionId": "SUB-1CCE2833B1",
+    "userId": "12345678",
+    "plan": "HomeVolt Pro",
+    "amount": 399,
+    "currency": "INR",
+    "billingCycle": "monthly",
+    "paymentMethod": "Credit/Debit Card",
+    "paymentStatus": "simulated_success",
+    "status": "active",
+    "startDate": "2026-09-27T09:14:37.322955+00:00",
+    "endDate": "2026-10-27T09:14:37.322955+00:00",
+    "autoRenew": false,
+    "createdAt": "2026-09-27T09:14:37.322955+00:00"
+  },
+  {
+    "subscriptionId": "SUB-C7BF08F938",
+    "userId": "21241421241",
+    "plan": "HomeVolt Pro",
+    "amount": 399,
+    "currency": "INR",
+    "billingCycle": "monthly",
+    "paymentMethod": "UPI",
+    "paymentStatus": "simulated_success",
+    "status": "active",
+    "startDate": "2026-09-27T11:44:25.245737+00:00",
+    "endDate": "2026-10-27T11:44:25.245737+00:00",
+    "autoRenew": false,
+    "createdAt": "2026-09-27T11:44:25.245737+00:00"
+  },
+  {
+    "subscriptionId": "SUB-61F9031B76",
+    "userId": "afafafa",
+    "plan": "HomeVolt Pro",
+    "amount": 399,
+    "currency": "INR",
+    "billingCycle": "monthly",
+    "paymentMethod": "UPI",
+    "paymentStatus": "simulated_success",
+    "status": "active",
+    "startDate": "2026-09-27T11:47:50.857174+00:00",
+    "endDate": "2026-10-27T11:47:50.857174+00:00",
+    "autoRenew": false,
+    "createdAt": "2026-09-27T11:47:50.857174+00:00"
+  }
+]

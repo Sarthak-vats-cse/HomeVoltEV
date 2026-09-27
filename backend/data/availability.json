@@ -1,0 +1,371 @@
+[
+  {
+    "availabilityId": "AVL001",
+    "chargerId": "CH001",
+    "day": "Monday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL002",
+    "chargerId": "CH001",
+    "day": "Tuesday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL003",
+    "chargerId": "CH001",
+    "day": "Wednesday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL004",
+    "chargerId": "CH001",
+    "day": "Thursday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL005",
+    "chargerId": "CH001",
+    "day": "Friday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL006",
+    "chargerId": "CH002",
+    "day": "Monday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL007",
+    "chargerId": "CH002",
+    "day": "Tuesday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL008",
+    "chargerId": "CH002",
+    "day": "Wednesday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL009",
+    "chargerId": "CH002",
+    "day": "Thursday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL010",
+    "chargerId": "CH002",
+    "day": "Friday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL011",
+    "chargerId": "CH003",
+    "day": "Tuesday",
+    "startTime": "17:00",
+    "endTime": "21:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL012",
+    "chargerId": "CH003",
+    "day": "Thursday",
+    "startTime": "17:00",
+    "endTime": "21:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL013",
+    "chargerId": "CH003",
+    "day": "Saturday",
+    "startTime": "10:00",
+    "endTime": "20:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL014",
+    "chargerId": "CH004",
+    "day": "Monday",
+    "startTime": "08:00",
+    "endTime": "20:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL015",
+    "chargerId": "CH004",
+    "day": "Tuesday",
+    "startTime": "08:00",
+    "endTime": "20:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL016",
+    "chargerId": "CH004",
+    "day": "Wednesday",
+    "startTime": "08:00",
+    "endTime": "20:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL017",
+    "chargerId": "CH004",
+    "day": "Thursday",
+    "startTime": "08:00",
+    "endTime": "20:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL018",
+    "chargerId": "CH004",
+    "day": "Friday",
+    "startTime": "08:00",
+    "endTime": "20:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL019",
+    "chargerId": "CH005",
+    "day": "Monday",
+    "startTime": "17:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL020",
+    "chargerId": "CH005",
+    "day": "Wednesday",
+    "startTime": "17:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL021",
+    "chargerId": "CH005",
+    "day": "Thursday",
+    "startTime": "17:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL022",
+    "chargerId": "CH005",
+    "day": "Friday",
+    "startTime": "17:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL023",
+    "chargerId": "CH005",
+    "day": "Saturday",
+    "startTime": "10:00",
+    "endTime": "20:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL024",
+    "chargerId": "CH006",
+    "day": "Monday",
+    "startTime": "10:00",
+    "endTime": "19:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL025",
+    "chargerId": "CH006",
+    "day": "Tuesday",
+    "startTime": "10:00",
+    "endTime": "19:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL026",
+    "chargerId": "CH006",
+    "day": "Wednesday",
+    "startTime": "10:00",
+    "endTime": "19:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL027",
+    "chargerId": "CH006",
+    "day": "Thursday",
+    "startTime": "10:00",
+    "endTime": "19:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL028",
+    "chargerId": "CH006",
+    "day": "Friday",
+    "startTime": "10:00",
+    "endTime": "19:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL029",
+    "chargerId": "CH007",
+    "day": "Tuesday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL030",
+    "chargerId": "CH007",
+    "day": "Wednesday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL031",
+    "chargerId": "CH007",
+    "day": "Thursday",
+    "startTime": "18:00",
+    "endTime": "22:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL032",
+    "chargerId": "CH008",
+    "day": "Monday",
+    "startTime": "09:00",
+    "endTime": "21:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL033",
+    "chargerId": "CH008",
+    "day": "Tuesday",
+    "startTime": "09:00",
+    "endTime": "21:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL034",
+    "chargerId": "CH008",
+    "day": "Wednesday",
+    "startTime": "09:00",
+    "endTime": "21:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL035",
+    "chargerId": "CH008",
+    "day": "Thursday",
+    "startTime": "09:00",
+    "endTime": "21:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL036",
+    "chargerId": "CH008",
+    "day": "Friday",
+    "startTime": "09:00",
+    "endTime": "21:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL037",
+    "chargerId": "CH009",
+    "day": "Monday",
+    "startTime": "17:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL038",
+    "chargerId": "CH009",
+    "day": "Wednesday",
+    "startTime": "17:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL039",
+    "chargerId": "CH009",
+    "day": "Friday",
+    "startTime": "17:00",
+    "endTime": "22:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL040",
+    "chargerId": "CH009",
+    "day": "Saturday",
+    "startTime": "10:00",
+    "endTime": "18:00",
+    "available": true
+  },
+
+  {
+    "availabilityId": "AVL041",
+    "chargerId": "CH010",
+    "day": "Tuesday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL042",
+    "chargerId": "CH010",
+    "day": "Wednesday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL043",
+    "chargerId": "CH010",
+    "day": "Thursday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL044",
+    "chargerId": "CH010",
+    "day": "Friday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  },
+  {
+    "availabilityId": "AVL045",
+    "chargerId": "CH010",
+    "day": "Saturday",
+    "startTime": "09:00",
+    "endTime": "18:00",
+    "available": true
+  }
+]

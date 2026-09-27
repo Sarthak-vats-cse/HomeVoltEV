@@ -1,0 +1,10 @@
+[
+  {
+    "bookingId": "BOOK001",
+    "chargerId": "CH001",
+    "date": "2026-08-24",
+    "startTime": "18:00",
+    "endTime": "20:00",
+    "status": "confirmed"
+  }
+]
