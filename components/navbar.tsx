@@ -1,8 +1,7 @@
+"use client";
 
-'use client';
-
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface User {
   id?: number;
@@ -19,16 +18,16 @@ export default function Navbar() {
     const loadUser = () => {
       try {
         const savedUser =
-          localStorage.getItem('homevolt_user') ||
-          sessionStorage.getItem('homevolt_user');
+          localStorage.getItem("homevolt_user") ||
+          sessionStorage.getItem("homevolt_user");
 
         if (savedUser) {
           const parsedUser = JSON.parse(savedUser);
 
           if (
             parsedUser &&
-            typeof parsedUser.full_name === 'string' &&
-            typeof parsedUser.email === 'string'
+            typeof parsedUser.full_name === "string" &&
+            typeof parsedUser.email === "string"
           ) {
             setUser(parsedUser);
           } else {
@@ -44,11 +43,10 @@ export default function Navbar() {
 
     loadUser();
 
-    // Update the navbar when login state changes in another tab.
-    window.addEventListener('storage', loadUser);
+    window.addEventListener("storage", loadUser);
 
     return () => {
-      window.removeEventListener('storage', loadUser);
+      window.removeEventListener("storage", loadUser);
     };
   }, []);
 
@@ -59,133 +57,152 @@ export default function Navbar() {
         .filter(Boolean)
         .slice(0, 2)
         .map((part) => part[0].toUpperCase())
-        .join('')
-    : '';
+        .join("")
+    : "";
 
   const handleLogout = () => {
-    localStorage.removeItem('homevolt_access_token');
-    localStorage.removeItem('homevolt_user');
+    localStorage.removeItem("homevolt_access_token");
+    localStorage.removeItem("homevolt_user");
 
-    sessionStorage.removeItem('homevolt_access_token');
-    sessionStorage.removeItem('homevolt_user');
+    sessionStorage.removeItem("homevolt_access_token");
+    sessionStorage.removeItem("homevolt_user");
 
     setUser(null);
     setDropdownOpen(false);
 
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   return (
-    <nav className="absolute top-0 left-0 w-full bg-transparent px-8 py-4 z-50 flex items-center justify-between">
+    <header className="fixed left-0 top-0 z-[9999] w-full">
 
-      {/* Left Section: Logo & Brand Container */}
-      <Link
-        href="/"
-        className="flex items-center gap-3 bg-white/80 backdrop-blur-sm p-2 rounded-xl shadow-sm hover:opacity-95 transition-opacity"
-      >
-        <img
-          src="/logo.png"
-          alt="HomeVolt Logo"
-          className="w-10 h-10 object-contain rounded-full"
-        />
+      {/* SINGLE CONNECTED NAVBAR */}
 
-        <div className="flex flex-col leading-none">
-          <div className="text-2xl font-black tracking-tight">
-            <span className="text-blue-600">Home</span>
-            <span className="text-green-600">Volt</span>
+      <nav className="flex h-[84px] w-full items-center justify-between border-b border-slate-200 bg-white px-6 shadow-sm">
+
+        {/* =========================
+            LOGO
+        ========================= */}
+
+        <Link
+          href="/"
+          className="flex items-center gap-3"
+        >
+          <img
+            src="/logo.png"
+            alt="HomeVolt Logo"
+            className="h-11 w-11 object-contain"
+          />
+
+          <div className="flex flex-col leading-none">
+
+            <div className="text-[30px] font-black tracking-tight">
+              <span className="text-blue-600">Home</span>
+              <span className="text-green-600">Volt</span>
+            </div>
+
+            <span className="mt-1 text-[11px] font-bold tracking-wide text-gray-500">
+              Powering Every Journey
+            </span>
+
           </div>
+        </Link>
 
-          <span className="text-[10px] text-gray-600 font-bold tracking-wide mt-0.5">
-            Powering Every Journey
-          </span>
-        </div>
-      </Link>
+        {/* =========================
+            RIGHT NAVIGATION
+        ========================= */}
 
-      {/* Right Section: Links & Profile */}
-      <div className="flex items-center gap-8 bg-white/95 backdrop-blur-md pl-10 pr-6 py-3 rounded-bl-3xl shadow-md">
-
-        {/* Navigation Item Links */}
-        <div className="flex items-center gap-8 text-[15px] font-bold text-gray-900">
+        <div className="flex h-full items-center">
 
           <Link
             href="/service-area"
-            className="hover:text-blue-600 transition-colors duration-200"
+            className="flex h-full items-center px-5 text-[15px] font-bold text-slate-900 transition hover:bg-slate-50 hover:text-blue-600"
           >
             Serviceable Area
           </Link>
 
           <Link
             href="/subscription"
-            className="hover:text-blue-600 transition-colors duration-200"
+            className="flex h-full items-center px-5 text-[15px] font-bold text-slate-900 transition hover:bg-slate-50 hover:text-blue-600"
           >
             Subscription
           </Link>
 
           <Link
-            href="/#how-it-works"
-            className="hover:text-blue-600 transition-colors duration-200"
+            href="/how-it-works"
+            className="flex h-full items-center px-5 text-[15px] font-bold text-slate-900 transition hover:bg-slate-50 hover:text-blue-600"
           >
             How it Works
           </Link>
 
           <Link
             href="/about"
-            className="hover:text-blue-600 transition-colors duration-200"
+            className="flex h-full items-center px-5 text-[15px] font-bold text-slate-900 transition hover:bg-slate-50 hover:text-blue-600"
           >
             About Us
           </Link>
 
           <Link
             href="/docs"
-            className="hover:text-blue-600 transition-colors duration-200"
-          >
-            FAQs
+            className="flex h-full items-center px-5 text-[15px] font-bold text-slate-900 transition hover:bg-slate-50 hover:text-blue-600"
+         >
+          FAQs
           </Link>
+
+          {/* =========================
+              PROFILE
+          ========================= */}
+
+          {user && (
+            <div className="relative ml-3">
+
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                aria-label="Open profile menu"
+                aria-expanded={dropdownOpen}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white transition hover:bg-blue-700"
+              >
+                {initials}
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 top-14 z-[10000] w-64 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
+
+                  <div className="border-b border-gray-100 px-5 py-4">
+
+                    <div className="truncate font-bold text-gray-900">
+                      {user.full_name}
+                    </div>
+
+                    <div className="mt-1 break-all text-sm text-gray-500">
+                      {user.email}
+                    </div>
+
+                  </div>
+
+                  <div className="p-2">
+
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="w-full rounded-xl px-4 py-3 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                    >
+                      Log out
+                    </button>
+
+                  </div>
+
+                </div>
+              )}
+
+            </div>
+          )}
+
         </div>
 
-        {/* Profile Section */}
-        {user && (
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              aria-label="Open profile menu"
-              aria-expanded={dropdownOpen}
-              className="w-11 h-11 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center border-2 border-white shadow-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              {initials}
-            </button>
+      </nav>
 
-            {/* Profile Dropdown */}
-            {dropdownOpen && (
-              <div className="absolute right-0 top-14 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-[60]">
-
-                <div className="px-5 py-4 border-b border-gray-100">
-                  <div className="font-bold text-gray-900 truncate">
-                    {user.full_name}
-                  </div>
-
-                  <div className="text-sm text-gray-500 mt-1 break-all">
-                    {user.email}
-                  </div>
-                </div>
-
-                <div className="p-2">
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors"
-                  >
-                    Log out
-                  </button>
-                </div>
-
-              </div>
-            )}
-          </div>
-        )}
-
-      </div>
-    </nav>
+    </header>
   );
 }
