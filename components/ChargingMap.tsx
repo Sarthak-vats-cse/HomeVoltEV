@@ -3,9 +3,34 @@
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 
-export default function ChargingMap() {
+type ChargingMapProps = {
+  visibleChargerIds: string[] | null;
+  destination: {
+    latitude: number;
+    longitude: number;
+  } | null;
+};
+
+export default function ChargingMap({
+  visibleChargerIds,
+  destination,
+}: ChargingMapProps) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMapRef = useRef<any>(null);
+
+const chargerMarkersRef = useRef<
+  Map<string, import("leaflet").Marker>
+>(new Map());
+
+const drawRouteRef = useRef<
+  ((lat: number, lng: number) => Promise<void>) | null
+>(null);
+
+const clearRouteRef = useRef<(() => void) | null>(null);
+
+const visibleIdsRef = useRef<string[] | null>(
+  visibleChargerIds
+);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -21,6 +46,105 @@ export default function ChargingMap() {
   [28.70, 77.20],
 9.1
 );
+let userLocation: [number, number] | null = null;
+
+let routeLine: import("leaflet").Polyline | null = null;
+
+let routeRequestId = 0;
+
+const drawRoute = async (
+  chargerLat: number,
+  chargerLng: number
+) => {
+  if (!userLocation) {
+    alert("Please click the location button first.");
+    return;
+  }
+
+  const requestId = ++routeRequestId;
+  const [userLat, userLng] = userLocation;
+
+  try {
+    const response = await fetch(
+      `https://router.project-osrm.org/route/v1/driving/${userLng},${userLat};${chargerLng},${chargerLat}?overview=full&geometries=geojson`
+    );
+
+    if (!response.ok) {
+      throw new Error("Routing request failed");
+    }
+
+    const data = await response.json();
+
+    if (requestId !== routeRequestId) return;
+
+    if (data.code !== "Ok" || !data.routes?.length) {
+      alert("No driving route found.");
+      return;
+    }
+
+    const route = data.routes[0];
+
+    const routeCoordinates =
+      route.geometry.coordinates.map(
+        (coord: [number, number]) =>
+          [coord[1], coord[0]] as [number, number]
+      );
+
+    if (routeLine) {
+      map.removeLayer(routeLine);
+    }
+
+    routeLine = L.polyline(routeCoordinates, {
+      color: "#2563eb",
+      weight: 5,
+      opacity: 0.9,
+      lineJoin: "round",
+      lineCap: "round",
+    }).addTo(map);
+
+    const distance = (route.distance / 1000).toFixed(1);
+    const duration = Math.round(route.duration / 60);
+
+    routeLine.bindTooltip(
+      `Driving distance: ${distance} km | ${duration} mins`,
+      {
+        sticky: true,
+      }
+    );
+
+    map.closePopup();
+
+    map.fitBounds(routeLine.getBounds(), {
+      padding: [40, 40],
+      maxZoom: 14,
+    });
+
+    L.popup()
+      .setLatLng([chargerLat, chargerLng])
+      .setContent(`
+        <strong>Driving Route</strong><br/>
+        Distance: ${distance} km<br/>
+        Estimated time: ${duration} mins
+      `)
+      .openOn(map);
+
+  } catch (error) {
+    console.error("Routing error:", error);
+    alert("Unable to calculate route. Please try again.");
+  }
+};
+drawRouteRef.current = drawRoute;
+
+clearRouteRef.current = () => {
+  routeRequestId++;
+
+  if (routeLine) {
+    map.removeLayer(routeLine);
+    routeLine = null;
+  }
+
+  map.closePopup();
+};
 const LocationControl = L.Control.extend({
   options: {
     position: "topleft",
@@ -47,6 +171,7 @@ const LocationControl = L.Control.extend({
       (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        userLocation = [latitude, longitude];
 
         console.log("User location:", latitude, longitude);
         console.log("Accuracy:", position.coords.accuracy, "meters");
@@ -169,16 +294,60 @@ const marker = L.marker(
 
 
 
-            marker.bindPopup(`
-              <strong>${charger.name}</strong><br/>
-              Charger ID: ${charger.chargerId}<br/>
-              Connector: ${charger.connectorType}<br/>
-              Charging: ${charger.chargingSpeed} kW<br/>
-              Price: ₹${charger.pricePerHour}/hour<br/>
-              Status: ${charger.status}
-            `);
+            
+const popupContent = document.createElement("div");
 
-            marker.addTo(map);
+popupContent.innerHTML = `
+  <strong>${charger.name}</strong><br/>
+  Charger ID: ${charger.chargerId}<br/>
+  Connector: ${charger.connectorType}<br/>
+  Charging: ${charger.chargingSpeed} kW<br/>
+  Price: ₹${charger.pricePerHour}/hour<br/>
+  Status: ${charger.status}
+`;
+
+const directionsButton = document.createElement("button");
+
+directionsButton.innerText = "Get Directions";
+
+directionsButton.style.cssText = `
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 14px;
+  margin-top: 12px;
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer;
+`;
+
+L.DomEvent.disableClickPropagation(directionsButton);
+
+directionsButton.onclick = () => {
+  drawRoute(
+    location.latitude,
+    location.longitude
+  );
+};
+
+popupContent.appendChild(directionsButton);
+
+marker.bindPopup(popupContent);
+
+
+            
+const chargerId = String(charger.chargerId);
+
+chargerMarkersRef.current.set(chargerId, marker);
+
+if (
+  visibleIdsRef.current === null ||
+  visibleIdsRef.current.includes(chargerId)
+) {
+  marker.addTo(map);
+}
+
           });
         })
         .catch((error) => {
@@ -195,6 +364,44 @@ const marker = L.marker(
       }
     };
   }, []);
+
+useEffect(() => {
+  visibleIdsRef.current = visibleChargerIds;
+
+  const map = leafletMapRef.current;
+
+  if (!map) return;
+
+  clearRouteRef.current?.();
+
+  chargerMarkersRef.current.forEach((marker, id) => {
+    const shouldShow =
+      visibleChargerIds === null ||
+      visibleChargerIds.includes(id);
+
+    if (shouldShow) {
+      if (!map.hasLayer(marker)) {
+        marker.addTo(map);
+      }
+    } else {
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
+    }
+  });
+}, [visibleChargerIds]);
+
+useEffect(() => {
+  if (!destination) {
+    clearRouteRef.current?.();
+    return;
+  }
+
+  drawRouteRef.current?.(
+    destination.latitude,
+    destination.longitude
+  );
+}, [destination]);
 
   return (
     <div

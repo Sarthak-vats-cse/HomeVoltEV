@@ -73,5 +73,35 @@
     "endDate": "2026-12-25T06:51:44.959651+00:00",
     "autoRenew": false,
     "createdAt": "2026-11-25T06:51:44.959651+00:00"
+  },
+  {
+    "subscriptionId": "SUB-7537E60B14",
+    "userId": "hebebf",
+    "plan": "HomeVolt Pro",
+    "amount": 399,
+    "currency": "INR",
+    "billingCycle": "monthly",
+    "paymentMethod": "Credit/Debit Card",
+    "paymentStatus": "simulated_success",
+    "status": "active",
+    "startDate": "2026-11-25T07:23:50.334702+00:00",
+    "endDate": "2026-12-25T07:23:50.334702+00:00",
+    "autoRenew": false,
+    "createdAt": "2026-11-25T07:23:50.334702+00:00"
+  },
+  {
+    "subscriptionId": "SUB-C51E6A984C",
+    "userId": "efjbehnf",
+    "plan": "HomeVolt Pro",
+    "amount": 399,
+    "currency": "INR",
+    "billingCycle": "monthly",
+    "paymentMethod": "UPI",
+    "paymentStatus": "simulated_success",
+    "status": "active",
+    "startDate": "2026-11-25T09:05:22.304507+00:00",
+    "endDate": "2026-12-25T09:05:22.304507+00:00",
+    "autoRenew": false,
+    "createdAt": "2026-11-25T09:05:22.304507+00:00"
   }
 ]

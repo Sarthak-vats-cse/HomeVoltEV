@@ -215,10 +215,21 @@ def search_pincode(pincode):
             "chargers": []
         }
 
+    
     results = find_nearest_chargers(
         coordinates["latitude"],
         coordinates["longitude"]
     )
+
+    # Maximum nearby search radius in kilometres
+    MAX_DISTANCE_KM = 50
+    MAX_RESULTS = 4
+
+    results = [
+        item for item in results
+        if item["distanceKm"] <= MAX_DISTANCE_KM
+    ][:MAX_RESULTS]
+
 
     return {
         "query": pincode,

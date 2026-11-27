@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
@@ -16,12 +16,23 @@ type Charger = {
   name?: string;
   charger_name?: string;
   host?: string | { name?: string };
-  location?: string | { address?: string; city?: string; name?: string };
+  location?: string | {
+  address?: string;
+  city?: string;
+  name?: string;
+  latitude?: number;
+  longitude?: number;
+};
   address?: string;
   city?: string;
   price?: number | string;
   price_per_kwh?: number | string;
   pricePerKwh?: number | string;
+  pricePerHour?: number | string;
+charger?: {
+  chargerId?: string;
+  pricePerHour?: number | string;
+};
   distanceKm?: number | string;
   distance_km?: number | string;
   distance?: number | string;
@@ -69,6 +80,22 @@ export default function Hero() {
   const [searchError, setSearchError] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [selectedDestination, setSelectedDestination] =
+  useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  
+const visibleChargerIds = useMemo(
+  () =>
+    hasSearched && searchResults.length > 0
+      ? searchResults
+          .map((item) => item.charger?.chargerId)
+          .filter((id): id is string => typeof id === "string")
+      : null,
+  [hasSearched, searchResults]
+);
+
 
   useEffect(() => {
     const token =
@@ -89,6 +116,7 @@ export default function Hero() {
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    setSelectedDestination(null);
 
     const query = searchQuery.trim();
 
@@ -187,18 +215,19 @@ export default function Hero() {
     return `${numericDistance.toFixed(1)} km`;
   };
 
-  const getPrice = (charger: Charger) => {
+  
+const getPrice = (charger: Charger) => {
     const price =
-      charger.price_per_kwh ??
-      charger.pricePerKwh ??
-      charger.price;
+      charger.charger?.pricePerHour ??
+      charger.pricePerHour;
 
     if (price === undefined || price === null || price === "") {
       return null;
     }
 
     return Number.isFinite(Number(price)) ? Number(price) : null;
-  };
+};
+
 
   const isAvailable = (charger: Charger) => {
     if (typeof charger.available === "boolean") {
@@ -394,7 +423,12 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="bg-white border border-gray-100 rounded-3xl p-6 lg:p-8 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-lg h-72 relative">
-            <ChargingMap />
+            
+<ChargingMap
+  visibleChargerIds={visibleChargerIds}
+  destination={selectedDestination}
+/>
+
           </div>
 
           <div className="flex flex-col gap-5 min-w-0">
@@ -521,7 +555,7 @@ export default function Hero() {
                           <div className="flex flex-wrap items-center gap-2 mt-2 text-[11px] font-semibold">
                             {distance && (
                               <span className="text-blue-600">
-                                {distance} away
+                                {distance} from search location
                               </span>
                             )}
 
@@ -552,7 +586,7 @@ export default function Hero() {
                             ₹{price}
                             <span className="text-[11px] text-gray-400 font-medium">
                               {" "}
-                              /kWh
+                              /hour
                             </span>
                           </span>
                         ) : (
@@ -570,6 +604,32 @@ export default function Hero() {
                             {available ? "● Available" : "● Unavailable"}
                           </span>
                         )}
+
+<button
+  type="button"
+  onClick={() => {
+    const location = charger.location;
+
+    if (
+      !location ||
+      typeof location !== "object" ||
+      location.latitude == null ||
+      location.longitude == null
+    ) {
+      alert("Charger location is unavailable.");
+      return;
+    }
+
+    setSelectedDestination({
+      latitude: location.latitude,
+      longitude: location.longitude,
+    });
+  }}
+  className="block w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white text-[12px] font-bold px-4 py-2 rounded-lg transition-all cursor-pointer"
+>
+  ➤ Get Directions
+</button>
+
                       </div>
                     </div>
                   );
@@ -585,7 +645,7 @@ export default function Hero() {
                     No charging stations found
                   </p>
                   <p className="text-[12px] text-gray-400 mt-1">
-                    Try another city, area, or PIN code.
+                    Try another PIN code or explore other charging stations on the map.
                   </p>
                 </div>
               )
