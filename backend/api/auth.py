@@ -2,6 +2,8 @@
 import hashlib
 import secrets
 import sqlite3
+import os
+from threading import Lock
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -28,7 +30,12 @@ password_hasher = PasswordHash.recommended()
 
 # Session lifetime
 SESSION_DAYS = 7
+# Development-only password recovery
+RESET_CODE_MINUTES = 5
+MAX_RESET_ATTEMPTS = 5
 
+password_reset_codes = {}
+password_reset_lock = Lock()
 
 # --------------------------------
 # Database initialization
@@ -82,7 +89,15 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=1, max_length=128)
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
 
+
+class ResetPasswordRequest(BaseModel):
+    email: EmailStr
+    code: str = Field(pattern=r"^[0-9]{6}$")
+    password: str = Field(min_length=8, max_length=128)
+    confirm_password: str = Field(min_length=8, max_length=128)
 # --------------------------------
 # Helper functions
 # --------------------------------
@@ -209,4 +224,154 @@ def login(request: LoginRequest):
         "token_type": "bearer",
         "expires_at": expires_at,
         "user": public_user(user),
+    }
+
+# --------------------------------
+# Forgot password (local demo only)
+# --------------------------------
+
+@router.post("/forgot-password")
+def forgot_password(request: ForgotPasswordRequest):
+    print("DEMO RESET VALUE:", repr(os.getenv("HOMEVOLT_DEMO_RESET")), flush=True)
+    if os.getenv("HOMEVOLT_DEMO_RESET") != "1":
+        raise HTTPException(
+            status_code=403,
+            detail="Demo password recovery is disabled."
+        )
+
+    email = str(request.email).strip().lower()
+
+    message = (
+        "If the account exists, a verification code "
+        "has been generated in the backend terminal."
+    )
+
+    with get_connection() as conn:
+        user = conn.execute(
+            "SELECT id FROM users WHERE email = ?",
+            (email,),
+        ).fetchone()
+
+    if user is None:
+        return {"message": message}
+
+    with password_reset_lock:
+
+        existing = password_reset_codes.get(email)
+        now = datetime.now(timezone.utc)
+
+        if existing and now < existing["expires_at"]:
+            return {"message": message}
+
+        code = str(secrets.randbelow(1000000)).zfill(6)
+
+        password_reset_codes[email] = {
+            "code_hash": hash_token(code),
+            "expires_at": now + timedelta(
+                minutes=RESET_CODE_MINUTES
+            ),
+            "attempts": 0,
+        }
+
+        print("\n--------------------------------")
+        print("HOMEVOLT PASSWORD RESET (DEMO)")
+        print(f"Verification Code: {code}")
+        print("Valid for 5 minutes")
+        print("--------------------------------\n", flush=True)
+
+    return {"message": message}
+
+
+# --------------------------------
+# Reset password (local demo only)
+# --------------------------------
+
+@router.post("/reset-password")
+def reset_password(request: ResetPasswordRequest):
+
+    if os.getenv("HOMEVOLT_DEMO_RESET") != "1":
+        raise HTTPException(
+            status_code=403,
+            detail="Demo password recovery is disabled."
+        )
+
+    email = str(request.email).strip().lower()
+
+    if request.password != request.confirm_password:
+        raise HTTPException(
+            status_code=400,
+            detail="Passwords do not match."
+        )
+
+    with password_reset_lock:
+
+        reset_data = password_reset_codes.get(email)
+
+        if reset_data is None:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid or expired verification code."
+            )
+
+        if datetime.now(timezone.utc) >= reset_data["expires_at"]:
+            password_reset_codes.pop(email, None)
+
+            raise HTTPException(
+                status_code=400,
+                detail="Verification code has expired."
+            )
+
+        if reset_data["attempts"] >= MAX_RESET_ATTEMPTS:
+            raise HTTPException(
+                status_code=429,
+                detail="Too many attempts. Wait for the code to expire."
+            )
+
+        if not secrets.compare_digest(
+            reset_data["code_hash"],
+            hash_token(request.code)
+        ):
+            reset_data["attempts"] += 1
+
+            raise HTTPException(
+                status_code=400,
+                detail="Incorrect verification code."
+            )
+
+        new_password_hash = password_hasher.hash(
+            request.password
+        )
+
+        with get_connection() as conn:
+
+            user = conn.execute(
+                "SELECT id FROM users WHERE email = ?",
+                (email,),
+            ).fetchone()
+
+            if user is None:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Password reset failed."
+                )
+
+            conn.execute(
+                """
+                UPDATE users
+                SET password_hash = ?
+                WHERE id = ?
+                """,
+                (new_password_hash, user["id"]),
+            )
+
+            # Invalidate existing login sessions
+            conn.execute(
+                "DELETE FROM auth_sessions WHERE user_id = ?",
+                (user["id"],),
+            )
+
+        password_reset_codes.pop(email, None)
+
+    return {
+        "message": "Password reset successfully."
     }

@@ -8,7 +8,9 @@ from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from threading import Lock
+from typing import Literal
 from fastapi.middleware.cors import CORSMiddleware
 
 from utils.charger_distance import calculate_charger_distances
@@ -82,7 +84,11 @@ subscriptions = load_json("subscriptions.json")
 def find_host(host_id):
     for host in hosts:
         if host["hostId"] == host_id:
-            return host
+            return {
+    key: value
+    for key, value in host.items()
+    if key not in ("phone", "email")
+}
     return None
 
 
@@ -762,3 +768,176 @@ def get_subscription_status(user_id: str):
         "status": subscription["status"],
         "subscription": subscription
     }
+
+
+# --------------------------------
+# Host registration request model
+# --------------------------------
+
+class HostRegistrationRequest(BaseModel):
+    fullName: str = Field(min_length=2)
+    phone: str = Field(min_length=10)
+    email: str = Field(min_length=5)
+    chargerName: str = Field(min_length=2)
+    chargerType: Literal["AC", "DC"]
+    connectorType: str = Field(min_length=1)
+    chargingSpeed: float = Field(gt=0)
+    address: str = Field(min_length=5)
+    city: str = Field(min_length=2)
+    pincode: str = Field(pattern=r"^[1-9][0-9]{5}$")
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+    price: float = Field(gt=0)
+    availability: str
+    description: str = ""
+
+host_registration_lock = Lock()
+
+
+def generate_next_id(records, key, prefix):
+    numbers = []
+
+    for record in records:
+        value = str(record.get(key, ""))
+
+        if value.startswith(prefix):
+            suffix = value[len(prefix):]
+
+            if suffix.isdigit():
+                numbers.append(int(suffix))
+
+    next_number = max(numbers, default=0) + 1
+
+    return f"{prefix}{next_number:03d}"
+
+
+# --------------------------------
+# Register a new host and charger
+# --------------------------------
+
+@app.post("/hosts/register", status_code=201)
+def register_host(request: HostRegistrationRequest):
+
+    days = [
+        "Monday", "Tuesday", "Wednesday",
+        "Thursday", "Friday", "Saturday", "Sunday"
+    ]
+
+    # Determine availability schedule
+    if request.availability == "24/7":
+        selected_days = days
+        start_time = "00:00"
+        end_time = "23:59"
+
+    elif request.availability == "Weekdays":
+        selected_days = days[:5]
+        start_time = "09:00"
+        end_time = "18:00"
+
+    elif request.availability == "Weekends":
+        selected_days = days[5:]
+        start_time = "09:00"
+        end_time = "18:00"
+
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail="Please select 24/7, Weekdays or Weekends."
+        )
+
+    with host_registration_lock:
+
+        # Generate unique IDs
+        host_id = generate_next_id(
+            hosts, "hostId", "HOST"
+        )
+
+        charger_id = generate_next_id(
+            chargers, "chargerId", "CH"
+        )
+
+        location_id = generate_next_id(
+            locations, "locationId", "LOC"
+        )
+
+        # Create host record
+        new_host = {
+            "hostId": host_id,
+            "name": request.fullName.strip(),
+            "phone": request.phone.strip(),
+            "email": request.email.strip(),
+            "address": request.address.strip(),
+            "city": request.city.strip(),
+            "pincode": request.pincode,
+            "verified": False
+        }
+
+        # Create charger record
+        new_charger = {
+            "chargerId": charger_id,
+            "hostId": host_id,
+            "name": request.chargerName.strip(),
+            "connectorType": request.connectorType,
+            "chargingType": request.chargerType,
+            "chargingSpeed": request.chargingSpeed,
+            "pricePerHour": request.price,
+            "status": "available",
+            "description": request.description
+        }
+
+        # Create location record
+        new_location = {
+            "locationId": location_id,
+            "hostId": host_id,
+            "address": request.address.strip(),
+            "city": request.city.strip(),
+            "pincode": request.pincode,
+            "latitude": request.latitude,
+            "longitude": request.longitude
+        }
+
+        # Create availability records
+        new_schedules = []
+
+        for day in selected_days:
+
+            availability_id = generate_next_id(
+                availability + new_schedules,
+                "availabilityId",
+                "AVL"
+            )
+
+            new_schedules.append({
+                "availabilityId": availability_id,
+                "chargerId": charger_id,
+                "day": day,
+                "startTime": start_time,
+                "endTime": end_time,
+                "available": True
+            })
+
+        # Prepare updated data
+        updated_hosts = hosts + [new_host]
+        updated_chargers = chargers + [new_charger]
+        updated_locations = locations + [new_location]
+        updated_availability = availability + new_schedules
+
+        # Save records permanently
+        save_json("hosts.json", updated_hosts)
+        save_json("locations.json", updated_locations)
+        save_json("availability.json", updated_availability)
+        save_json("chargers.json", updated_chargers)
+
+        # Update running backend data
+        hosts.append(new_host)
+        locations.append(new_location)
+        availability.extend(new_schedules)
+        chargers.append(new_charger)
+
+        return {
+            "message": "Host registered successfully!",
+            "hostId": host_id,
+            "chargerId": charger_id,
+            "locationId": location_id,
+            "totalChargers": len(chargers)
+        }

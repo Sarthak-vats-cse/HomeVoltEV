@@ -39,7 +39,6 @@
     "endTime": "22:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL006",
     "chargerId": "CH002",
@@ -80,7 +79,6 @@
     "endTime": "18:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL011",
     "chargerId": "CH003",
@@ -105,7 +103,6 @@
     "endTime": "20:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL014",
     "chargerId": "CH004",
@@ -146,7 +143,6 @@
     "endTime": "20:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL019",
     "chargerId": "CH005",
@@ -187,7 +183,6 @@
     "endTime": "20:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL024",
     "chargerId": "CH006",
@@ -228,7 +223,6 @@
     "endTime": "19:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL029",
     "chargerId": "CH007",
@@ -253,7 +247,6 @@
     "endTime": "22:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL032",
     "chargerId": "CH008",
@@ -294,7 +287,6 @@
     "endTime": "21:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL037",
     "chargerId": "CH009",
@@ -327,7 +319,6 @@
     "endTime": "18:00",
     "available": true
   },
-
   {
     "availabilityId": "AVL041",
     "chargerId": "CH010",

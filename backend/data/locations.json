@@ -36,14 +36,14 @@
     "longitude": 77.323142
   },
   {
-  "locationId": "LOC005",
-  "hostId": "HOST005",
-  "address": "Ghaziabad",
-  "city": "Ghaziabad",
-  "pincode": "201001",
-  "latitude": 28.670185,
-  "longitude": 77.444550
-},
+    "locationId": "LOC005",
+    "hostId": "HOST005",
+    "address": "Ghaziabad",
+    "city": "Ghaziabad",
+    "pincode": "201001",
+    "latitude": 28.670185,
+    "longitude": 77.44455
+  },
   {
     "locationId": "LOC006",
     "hostId": "HOST006",
@@ -54,23 +54,23 @@
     "longitude": 77.058526
   },
   {
-  "locationId": "LOC007",
-  "hostId": "HOST007",
-  "address": "Sarojini Nagar",
-  "city": "New Delhi",
-  "pincode": "110023",
-  "latitude": 28.5757,
-  "longitude": 77.1990
-},
+    "locationId": "LOC007",
+    "hostId": "HOST007",
+    "address": "Sarojini Nagar",
+    "city": "New Delhi",
+    "pincode": "110023",
+    "latitude": 28.5757,
+    "longitude": 77.199
+  },
   {
-  "locationId": "LOC008",
-  "hostId": "HOST008",
-  "address": "Gandhi Nagar",
-  "city": "Delhi",
-  "pincode": "110031",
-  "latitude": 28.66214,
-  "longitude": 77.26665
-},
+    "locationId": "LOC008",
+    "hostId": "HOST008",
+    "address": "Gandhi Nagar",
+    "city": "Delhi",
+    "pincode": "110031",
+    "latitude": 28.66214,
+    "longitude": 77.26665
+  },
   {
     "locationId": "LOC009",
     "hostId": "HOST009",
@@ -84,9 +84,9 @@
     "locationId": "LOC010",
     "hostId": "HOST010",
     "address": "Sector 137",
-"city": "Noida",
-"pincode": "201305",
-"latitude": 28.51087,
-"longitude": 77.40350
+    "city": "Noida",
+    "pincode": "201305",
+    "latitude": 28.51087,
+    "longitude": 77.4035
   }
 ]

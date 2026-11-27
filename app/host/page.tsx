@@ -6,6 +6,15 @@ import Link from "next/link";
 
 export default function HostPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+const [isLocating, setIsLocating] = useState(false);
+const [error, setError] = useState("");
+const [registeredChargerId, setRegisteredChargerId] = useState("");
+
+const [coordinates, setCoordinates] = useState<{
+  latitude: number;
+  longitude: number;
+} | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -14,6 +23,7 @@ export default function HostPage() {
     chargerName: "",
     chargerType: "",
     connectorType: "",
+    chargingSpeed: "",
     address: "",
     city: "",
     pincode: "",
@@ -35,12 +45,99 @@ export default function HostPage() {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+const getCurrentLocation = () => {
+  setError("");
 
-    // Frontend demo only. Backend submission will be integrated later.
+  if (!navigator.geolocation) {
+    setError("Geolocation is not supported by your browser.");
+    return;
+  }
+
+  setIsLocating(true);
+  setCoordinates(null);
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      setCoordinates({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+
+      setIsLocating(false);
+    },
+    () => {
+      setError(
+        "Unable to detect your location. Please allow location access and try again."
+      );
+
+      setIsLocating(false);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0,
+    }
+  );
+};
+
+  
+const handleSubmit = async (
+  event: React.FormEvent<HTMLFormElement>
+) => {
+  event.preventDefault();
+  setError("");
+
+  if (isSubmitting) return;
+
+  if (!coordinates) {
+    setError("Please capture your charging station location.");
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/hosts/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          chargingSpeed: Number(formData.chargingSpeed),
+          price: Number(formData.price),
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        typeof data.detail === "string"
+          ? data.detail
+          : "Please check your registration details."
+      );
+    }
+
+    setRegisteredChargerId(data.chargerId);
     setSubmitted(true);
-  };
+
+  } catch (err) {
+    setError(
+      err instanceof Error
+        ? err.message
+        : "Host registration failed. Please try again."
+    );
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const inputClass =
     "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10";
@@ -318,9 +415,9 @@ export default function HostPage() {
                     Your Information
                   </h3>
                   <p className="mt-2 text-xs leading-5 text-slate-600">
-                    Provide accurate contact and charger details. This
-                    demo form does not submit or store your information
-                    on a server yet.
+                    Provide accurate contact and charger details.
+Your charger address and location will be visible
+to drivers using the HomeVolt platform.
                   </p>
                 </div>
               </div>
@@ -339,22 +436,23 @@ export default function HostPage() {
                   </div>
 
                   <h3 className="mt-6 text-2xl font-black text-slate-900">
-                    Form Completed!
+                    Host Registration Successful!
                   </h3>
 
                   <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-slate-500">
-                    Your details have been validated in this demo.
-                    The host registration backend is not connected yet,
-                    so your information has not been saved.
+                    Your charging station has been successfully registered
+with HomeVolt. Drivers can now discover your charger
+through the charging station search.
                   </p>
-
-                  <button
-                    type="button"
-                    onClick={() => setSubmitted(false)}
-                    className="mt-8 rounded-xl border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
-                  >
-                    Back to Form
-                  </button>
+<p className="mt-4 text-lg font-bold text-blue-600">
+  Charger ID: {registeredChargerId}
+</p>
+                  <Link
+  href="/"
+  className="mt-8 inline-block rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white hover:bg-blue-700"
+>
+  View Charging Stations →
+</Link>
                 </div>
               ) : (
                 <>
@@ -486,6 +584,25 @@ export default function HostPage() {
                     </div>
                   </div>
 
+<div className="mt-5">
+  <label htmlFor="chargingSpeed" className={labelClass}>
+    Charging Speed (kW) *
+  </label>
+
+  <input
+    id="chargingSpeed"
+    name="chargingSpeed"
+    type="number"
+    min="0.1"
+    step="0.1"
+    value={formData.chargingSpeed}
+    onChange={handleChange}
+    placeholder="e.g. 7.4"
+    className={inputClass}
+    required
+  />
+</div>
+
                   <div className="my-9 border-t border-slate-100" />
 
                   {/* Location */}
@@ -548,6 +665,40 @@ export default function HostPage() {
                     </div>
                   </div>
 
+<div className="mt-5 rounded-2xl border border-blue-100 bg-blue-50 p-5">
+
+  <h4 className="text-sm font-bold text-slate-900">
+    Charger GPS Location *
+  </h4>
+
+  <p className="mt-2 text-xs text-slate-600">
+    Please stand near your charging station and capture
+    its location so drivers can navigate to it.
+  </p>
+
+  <button
+    type="button"
+    onClick={getCurrentLocation}
+    disabled={isLocating || isSubmitting}
+    className="mt-4 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+  >
+    {isLocating
+      ? "Detecting location..."
+      : "📍 Use Current Location"}
+  </button>
+
+  {coordinates && (
+    <div className="mt-4 text-sm text-emerald-600">
+      <p className="font-bold">
+        ✓ Location captured successfully
+      </p>
+      <p>Latitude: {coordinates.latitude.toFixed(6)}</p>
+      <p>Longitude: {coordinates.longitude.toFixed(6)}</p>
+    </div>
+  )}
+
+</div>
+
                   <div className="my-9 border-t border-slate-100" />
 
                   {/* Pricing and availability */}
@@ -563,7 +714,7 @@ export default function HostPage() {
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                     <div>
                       <label htmlFor="price" className={labelClass}>
-                        Price per kWh (₹) *
+                        Price per Hour (₹) *
                       </label>
                       <div className="relative">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 font-semibold text-slate-400">
@@ -577,7 +728,7 @@ export default function HostPage() {
                           step="0.5"
                           value={formData.price}
                           onChange={handleChange}
-                          placeholder="e.g. 16"
+                          placeholder="e.g. 100"
                           className={`${inputClass} pl-9`}
                           required
                         />
@@ -598,9 +749,8 @@ export default function HostPage() {
                       >
                         <option value="">Select availability</option>
                         <option value="24/7">24/7</option>
-                        <option value="Weekdays">Weekdays</option>
-                        <option value="Weekends">Weekends</option>
-                        <option value="Flexible">Flexible Hours</option>
+                        <option value="Weekdays">Weekdays (9 AM - 6 PM)</option>
+                        <option value="Weekends">Weekends (9 AM - 6 PM)</option>
                       </select>
                     </div>
 
@@ -623,19 +773,33 @@ export default function HostPage() {
                     <div className="flex items-start gap-3">
                       <span className="text-xl">ℹ️</span>
                       <p className="text-xs leading-5 text-slate-600">
-                        This is a frontend demonstration. Your information
-                        will not be saved or published until the host
-                        registration API is connected.
+                        Your charging station will be listed on HomeVolt
+after successful registration. Please ensure all
+charger and location details are accurate.
                       </p>
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
-                  >
-                    Complete Host Registration →
-                  </button>
+                  
+{error && (
+  <div
+    role="alert"
+    className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-600"
+  >
+    {error}
+  </div>
+)}
+
+<button
+  type="submit"
+  disabled={isSubmitting || isLocating}
+  className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+>
+  {isSubmitting
+    ? "Registering your charger..."
+    : "Complete Host Registration →"}
+</button>
+
 
                   <p className="mt-4 text-center text-xs text-slate-400">
                     By continuing, you agree to the HomeVolt host

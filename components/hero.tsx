@@ -970,136 +970,154 @@ const getPrice = (charger: Charger) => {
         </div>
       </div>
 
-      {/* 7. FOOTER */}
-      <footer className="bg-[#0d1b2e] text-white pt-16 pb-8 px-6 lg:px-8 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 items-start">
-          {/* Brand */}
-          <div className="lg:col-span-4 flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-base">
-                ⚡
-              </div>
-              <div>
-                <h3 className="text-[18px] font-black tracking-tight leading-none">
-                  HomeVolt
-                </h3>
-                <span className="text-[10px] text-slate-400 font-semibold tracking-widest uppercase mt-1 block">
-                  Powering Every Journey
-                </span>
-              </div>
-            </div>
+      
 
-            <p className="text-slate-400 text-[13px] font-medium leading-relaxed max-w-sm">
-              HomeVolt connects EV owners with trusted home-based charging
-              stations across the country.
-            </p>
+{/* 7. FOOTER */}
+<footer className="bg-[#0d1b2e] text-white pt-16 pb-8 px-6 lg:px-8 border-t border-slate-800">
 
-            <div className="flex items-center gap-2 mt-1">
-              {["facebook", "instagram", "linkedin", "x"].map((icon) => (
-                <a
-                  key={icon}
-                  href="#"
-                  aria-label={icon}
-                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-all hover:-translate-y-0.5"
-                >
-                  <img
-                    src={`https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/${icon}.svg`}
-                    alt={icon}
-                    className="w-3.5 h-3.5 invert"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
+  <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 items-start">
 
-          {/* Link columns */}
-          {[
-            {
-              title: "Company",
-              links: ["About Us", "Our Impact", "Careers", "Press"],
-            },
-            {
-              title: "Community",
-              links: ["Become a Host", "Safety", "Guidelines", "Support"],
-            },
-            {
-              title: "Legal",
-              links: [
-                "Privacy Policy",
-                "Terms of Service",
-                "Refund Policy",
-                "Cookies Policy",
-              ],
-            },
-          ].map((col) => (
-            <div
-              key={col.title}
-              className="lg:col-span-2 flex flex-col gap-3"
+    {/* Brand */}
+    <div className="lg:col-span-3 flex flex-col gap-4">
+      <Link href="/" className="flex items-center gap-3">
+        <img
+          src="/logo.png"
+          alt="HomeVolt Logo"
+          className="w-11 h-11 object-contain"
+        />
+
+        <div>
+          <h3 className="text-xl font-black tracking-tight leading-none">
+            <span className="text-blue-500">Home</span>
+            <span className="text-green-500">Volt</span>
+          </h3>
+
+          <span className="text-[10px] text-slate-400 font-semibold tracking-widest uppercase mt-1 block">
+            Powering Every Journey
+          </span>
+        </div>
+      </Link>
+
+      <p className="text-slate-400 text-[13px] font-medium leading-relaxed">
+        HomeVolt connects EV owners with home-based charging
+        stations, making electric vehicle charging more
+        accessible, convenient and sustainable.
+      </p>
+
+      <div className="flex items-center gap-2 text-green-400 text-xs font-semibold">
+        <span className="w-2 h-2 rounded-full bg-green-500" />
+        Powering a sustainable future
+      </div>
+    </div>
+
+    {/* Quick Links */}
+    <div className="lg:col-span-2 flex flex-col gap-4">
+
+      <h4 className="text-[12px] font-black text-slate-200 uppercase tracking-wider">
+        Quick Links
+      </h4>
+
+      <ul className="flex flex-col gap-3">
+        {[
+          { name: "Serviceable Area", href: "/service-area" },
+          { name: "Subscription", href: "/subscription" },
+          { name: "How It Works", href: "/how-it-works" },
+          { name: "About Us", href: "/about" },
+          { name: "FAQs", href: "/docs" },
+        ].map((item) => (
+          <li key={item.name}>
+            <Link
+              href={item.href}
+              className="text-[13px] text-slate-400 font-medium hover:text-green-400 transition-colors"
             >
-              <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-wider">
-                {col.title}
-              </h4>
+              {item.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
 
-              <ul className="flex flex-col gap-2.5">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a
-                      href="#"
-                      className="text-[13px] text-slate-400 font-medium hover:text-white transition-colors"
-                    >
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+    </div>
 
-          {/* Contact */}
-          <div className="lg:col-span-2 flex flex-col gap-3">
-            <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-wider">
-              Contact
-            </h4>
+    {/* Platform Features */}
+    <div className="lg:col-span-3 flex flex-col gap-4">
 
-            <ul className="flex flex-col gap-3">
-              {[
-                {
-                  icon: "✉",
-                  text: "hello@homevolt.in",
-                  href: "mailto:hello@homevolt.in",
-                },
-                {
-                  icon: "📞",
-                  text: "+91 8853499620",
-                  href: "tel:+918853499620",
-                },
-                {
-                  icon: "📍",
-                  text: "New Delhi, India",
-                  href: "#",
-                },
-              ].map((item) => (
-                <li key={item.text} className="flex items-start gap-2">
-                  <span className="text-slate-500 mt-0.5">{item.icon}</span>
-                  <a
-                    href={item.href}
-                    className="text-[13px] text-slate-400 font-medium hover:text-white transition-colors break-all"
-                  >
-                    {item.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      <h4 className="text-[12px] font-black text-slate-200 uppercase tracking-wider">
+        Our Platform
+      </h4>
 
-        {/* Bottom bar */}
-        <div className="max-w-7xl mx-auto border-t border-slate-800/60 mt-12 pt-6 text-center">
-          <p className="text-[11px] text-slate-500 font-semibold tracking-wide">
-            Built for a greener tomorrow.
-          </p>
-        </div>
-      </footer>
+      <ul className="flex flex-col gap-3 text-[13px] text-slate-400 font-medium">
+        <li>⚡ Peer-to-peer EV charging</li>
+        <li>📍 Nearby charger discovery</li>
+        <li>🧭 Road navigation</li>
+        <li>🏠 Home charger hosting</li>
+        <li>💳 Subscription plans</li>
+      </ul>
+
+    </div>
+
+    {/* Service Regions */}
+    <div className="lg:col-span-2 flex flex-col gap-4">
+
+      <h4 className="text-[12px] font-black text-slate-200 uppercase tracking-wider">
+        Service Regions
+      </h4>
+
+      <ul className="flex flex-col gap-3 text-[13px] text-slate-400 font-medium">
+        {[
+          "New Delhi",
+          "Sonipat",
+          "Gurugram",
+          "Noida",
+          "Ghaziabad",
+        ].map((city) => (
+          <li key={city} className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+            {city}
+          </li>
+        ))}
+      </ul>
+
+    </div>
+
+    {/* Our Mission */}
+    <div className="lg:col-span-2 flex flex-col gap-4">
+
+      <h4 className="text-[12px] font-black text-slate-200 uppercase tracking-wider">
+        Our Mission
+      </h4>
+
+      <p className="text-[13px] text-slate-400 font-medium leading-relaxed">
+        Building a community-powered charging network
+        for a cleaner and greener tomorrow.
+      </p>
+
+      <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-3">
+        <p className="text-green-400 text-xs font-bold leading-relaxed">
+          🌱 Charge Smarter. Drive Greener.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* Bottom Bar */}
+  <div className="max-w-7xl mx-auto border-t border-slate-800 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+
+    <p className="text-[12px] text-slate-400 font-medium">
+      © {new Date().getFullYear()} HomeVoltEV. All rights reserved.
+    </p>
+
+    <p className="text-[12px] text-slate-400 font-medium">
+      Built for a greener tomorrow.
+      <span className="text-green-500 ml-2">🌱</span>
+    </p>
+
+  </div>
+
+</footer>
+
+
     </section>
   );
 }
