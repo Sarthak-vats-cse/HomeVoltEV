@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic[email]
+pwdlib[argon2]
+pymongo[srv]
+python-dotenv
